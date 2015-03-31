@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain>
+
+   <initialstate>
+
+      <variable id="u_m">
+         <value>Welcome to CULPAConvo! You can ask about a professor or a course. Which would you like?
+         </value>
+      </variable>
+   </initialstate>
+
+	<!-- NLU model -->
+	<model trigger="u_u">
+
+		<rule>
+			<case>
+				<condition operator="or">
+					<if var="u_u" value="* Julia Hirschberg" relation="contains" />
+					<if var="u_u" value="Professor * Hirschberg" relation="contains" />
+				</condition>
+				<effect prob="1">
+					<set var="a_u" value="Request(Julia)" />
+				</effect>
+			</case>
+			<case>
+				<condition operator="or">
+					<if var="u_u" value="* Michael Collins" relation="contains" />
+					<if var="u_u" value="Professor Collins" relation="contains" />
+				</condition>
+				<effect prob="1">
+					<set var="a_u" value="Request(Michael)" />
+				</effect>
+             </case>
+             <case>
+                <condition operator="or">
+                   <if var="u_u" value="Natural Language Processing" relation="contains" />
+                   <if var="u_u" value="NLP" relation="contains" />
+                   <if var="u_u" value="* 4705" relation="contains" />
+                </condition>
+                <effect prob="1">
+                   <set var="a_u" value="Request(NLP)" />
+                </effect>
+             </case>
+             <case>
+                <condition operator="or">
+                   <if var="u_u" value="* 1004" relation="contains" />
+                   <if var="u_u" value="Intro* to Java" relation="contains" />
+                </condition>
+                <effect prob="1">
+                   <set var="a_u" value="Request(1004)" />
+                </effect>
+             </case>
+             <case>
+                <condition operator="or">
+                   <if var="u_u" value="Intro* to *" relation="contains" />
+                </condition>
+                <effect prob="1">
+                   <set var="a_u" value="Confirm(Intro)" />
+                </effect>
+             </case>
+
+
+		</rule>
+	</model>
+
+	<!-- Action selection model -->
+	<model trigger="a_u">
+
+		<rule id="identify">
+			<case>
+				<condition>
+					<if var="a_u" value="Request({X})" />
+				</condition>
+				<effect util="1">
+					<set var="a_m" value="Identify({X})" />
+				</effect>
+			</case>
+         </rule>
+
+         <rule id="confirm">
+            <case>
+               <condition>
+                  <if var="a_u" value="Confirm({X})" />
+               </condition>
+               <effect util="1">
+                  <set var="a_m" value="Confirm({X})" />
+               </effect>
+            </case>
+         </rule>
+
+		<rule id ="negative">
+			<case>
+				<effect util="-0.5">
+					<set var="a_m" value="Identify(*)" />
+				</effect>
+			</case>
+		</rule>
+
+
+		<rule id="repeat">
+			<case>
+				<effect util="0.2">
+					<set var="a_m" value="AskRepeat" />
+				</effect>
+			</case>
+		</rule>
+
+	</model>
+
+
+	<!-- NLG model -->
+	<model trigger="a_m">
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="Identify({X})" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="Ok, identified {X}" />
+				</effect>
+			</case>
+			<case>
+				<condition>
+					<if var="a_m" value="AskRepeat" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="Sorry, could you repeat?" />
+				</effect>
+			</case>
+		</rule>
+	</model>
+
+
+
+	<!-- Prediction model for the next user dialogue act -->
+	<model trigger="a_m">
+
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="AskRepeat" />
+				</condition>
+				<effect prob="0.95">
+					<set var="a_u^p" value="{a_u}" />
+				</effect>
+			</case>
+		</rule>
+	</model>
+
+
+</domain>
