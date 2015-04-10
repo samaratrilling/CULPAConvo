@@ -1,4 +1,4 @@
-package opendial.modules.examples;
+package opendial.modules.examples.apimodule;
 import java.util.Collection;
 import opendial.DialogueSystem;
 import opendial.arch.DialException;
@@ -9,6 +9,7 @@ import opendial.state.DialogueState;
 
 public class CULPAInfo implements Module {
    DialogueSystem system;
+   APIAgent agent;
    boolean paused = true;
 
    /**
@@ -17,6 +18,7 @@ public class CULPAInfo implements Module {
     */
    public CULPAInfo(DialogueSystem system) {
       this.system = system;
+      this.agent = new APIAgent();
    }
 
    /**
@@ -39,6 +41,13 @@ public class CULPAInfo implements Module {
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
 
+         // Example
+         String latestReview = agent.query("Reviews", "professsor_id", "10729", "latestReview");
+         String newAction = "ReadReview(" + latestReview + ")";
+         system.addContent(new Assignment("a_m", newAction));
+
+         // end example
+         /*
          if (action.equals("FindProfessor")) {
             String profName = state.queryProb("Professor").toDiscrete().getBest().toString();
             // query the API for that professor.
@@ -55,7 +64,7 @@ public class CULPAInfo implements Module {
             String classInfo = "9:10am, taught by a professor";
             String newAction="DisplayClass(" + className + " " + classInfo + ")";
             system.addContent(new Assignment("a_m", newAction));
-         }
+         }*/
       }
    }
 
