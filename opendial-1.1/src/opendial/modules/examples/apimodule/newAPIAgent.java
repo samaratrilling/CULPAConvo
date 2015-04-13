@@ -137,6 +137,7 @@ public class newAPIAgent {
 
 
 //httpPost method to pass review text to sentiment API
+//Source:  http://www.xyzws.com/javafaq/how-to-use-httpurlconnection-post-data-to-web-server/139
 public static String httpPost(String targetURL, String urlParameters)
 {
   URL url;
