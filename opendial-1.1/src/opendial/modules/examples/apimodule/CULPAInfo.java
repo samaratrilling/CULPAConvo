@@ -41,30 +41,51 @@ public class CULPAInfo implements Module {
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
 
-         // Example
+         /*// Example
          String latestReview = agent.query("Reviews", "professsor_id", "10729", "latestReview");
          String newAction = "ReadReview(" + latestReview + ")";
          system.addContent(new Assignment("a_m", newAction));
 
-         // end example
-         /*
-         if (action.equals("FindProfessor")) {
-            String profName = state.queryProb("Professor").toDiscrete().getBest().toString();
-            // query the API for that professor.
-            // for now just does a dummy return.
-            String classes = "NLP " + 
-                     "Spoken Dialogue Systems " +
-                     "Spoken Language Processing";
-            String newAction="DisplayClasses(" + classes + ")";
+         // end example*/
+         
+         if (action.equals("ProfReview")) {
+            String profName = state.queryProb("prof").toDiscrete().getBest().toString();
+            // String revoptions = return the "we found x positive and y negative reviews."
+
+            String newAction="ReviewOptions(" + revoptions + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
+         else if (action.equals("CourseReview")) {
+            String courseName = state.queryProb("course").toDiscrete().getBest().toString();
+            // String revoptions = return the "we found x positive and y negative reviews."
 
-         else if (action.equals("FindClass")) {
-            String className = state.queryProb("a_m").toDiscrete().getBest().toString();
-            String classInfo = "9:10am, taught by a professor";
-            String newAction="DisplayClass(" + className + " " + classInfo + ")";
+            String newAction="ReviewOptions(" + revoptions + ")";
             system.addContent(new Assignment("a_m", newAction));
-         }*/
+         }
+         else if (action.equals("ProfRecentReview")) {
+            String profName = state.queryProb("prof").toDiscrete().getBest().toString();
+           // String recentReview = Get most recent review for profName
+            String newAction="RecentReview(" + recentReview + ")";
+            system.addContent(new Assignment("a_m", newAction));
+         }
+         else if (action.equals("ProfSummaryReview")) {
+            String profName = state.queryProb("prof").toDiscrete().getBest().toString();
+           // String summaryReview = Get the sentiment summary
+            String newAction="SummaryReview(" + summaryReview + ")";
+            system.addContent(new Assignment("a_m", newAction));
+         }
+         else if (action.equals("CourseRecentReview")) {
+            String courseName = state.queryProb("course").toDiscrete().getBest().toString();
+           // String recentReview = Get most recent review for courseName
+            String newAction="RecentReview(" + recentReview + ")";
+            system.addContent(new Assignment("a_m", newAction));
+         }
+         else if (action.equals("CourseSummaryReview")) {
+            String courseName = state.queryProb("course").toDiscrete().getBest().toString();
+           // String summaryReview = Get the sentiment summary
+            String newAction="SummaryReview(" + summaryReview + ")";
+            system.addContent(new Assignment("a_m", newAction));
+         }
       }
    }
 
