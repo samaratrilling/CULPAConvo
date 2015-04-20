@@ -4,7 +4,8 @@
    <initialstate>
 
       <variable id="u_m">
-         <value>Welcome to CULPAConvo! You can ask about a professor or a course. Which would you like?
+         <value>Welcome to CULPAConvo: CS Edition! You can ask about a professor or a course.
+            Which would you like?
          </value>
       </variable>
    </initialstate>
@@ -12,67 +13,70 @@
 	<!-- NLU model -->
 	<model trigger="u_u">
 
-		<rule>
+       <!-- <rule id="ProfOrCourse">
+           <case>
+              <condition operator="or">
+                 <if var="u_u" value="Course" relation="contains" />
+                 <if var="u_u" value="Class" relation="contains" />
+              </condition>
+              <effect prof="1">
+                 <set var="a_u" value="Request(Course)" />
+              </effect>
+           </case>
+        </rule> -->
+        <rule id="Professor">
 			<case>
-				<condition operator="or">
-					<if var="u_u" value="* Julia Hirschberg" relation="contains" />
-					<if var="u_u" value="Professor * Hirschberg" relation="contains" />
+				<condition>
+                   <if var="u_u" value="(Professor)? {LastName}" relation="contains"/>
+                   <if var="LastName" relation="in" value="[Agarwal,Aho,Allen,Arabshian,Baset,Belhumeur,Bellovin,Biliris,Blaer,Burnside,Cannon,Carloni,Chaintreau,Chen,Choi,Chudnovsky,Collins,Creamer,Cui,Edwards,Elson,Fei,Feiner,Feldman,Galanter,Gravano,Grinspun,Gross]"/>
 				</condition>
-				<effect prob="1">
-					<set var="a_u" value="Request(Julia)" />
+				<effect>
+                   <set var="a_u" value="RequestProf({LastName})" />
 				</effect>
 			</case>
-			<case>
-				<condition operator="or">
-					<if var="u_u" value="* Michael Collins" relation="contains" />
-					<if var="u_u" value="Professor Collins" relation="contains" />
-				</condition>
-				<effect prob="1">
-					<set var="a_u" value="Request(Michael)" />
+            <case>
+               <condition>
+                   <if var="u_u" value="Julia Hirschberg" relation="contains"/>
+                </condition>
+                <effect>
+                   <set var="a_u" value="RequestProf(Hirschberg)" />
 				</effect>
              </case>
-             <case>
+
+         </rule>
+         <rule id="Course">
+			<case>
                 <condition operator="or">
-                   <if var="u_u" value="Natural Language Processing" relation="contains" />
                    <if var="u_u" value="NLP" relation="contains" />
-                   <if var="u_u" value="* 4705" relation="contains" />
                 </condition>
                 <effect prob="1">
-                   <set var="a_u" value="Request(NLP)" />
+                   <set var="a_u" value="RequestCourse(NLP)" />
                 </effect>
              </case>
-             <case>
-                <condition operator="or">
-                   <if var="u_u" value="* 1004" relation="contains" />
-                   <if var="u_u" value="Intro* to Java" relation="contains" />
-                </condition>
-                <effect prob="1">
-                   <set var="a_u" value="Request(1004)" />
-                </effect>
-             </case>
-             <case>
-                <condition operator="or">
-                   <if var="u_u" value="Intro* to *" relation="contains" />
-                </condition>
-                <effect prob="1">
-                   <set var="a_u" value="Confirm(Intro)" />
-                </effect>
-             </case>
-
-
 		</rule>
 	</model>
 
 	<!-- Action selection model -->
 	<model trigger="a_u">
 
-		<rule id="identify">
+		<rule id="identifyProf">
 			<case>
 				<condition>
-					<if var="a_u" value="Request({X})" />
+					<if var="a_u" value="RequestProf({X})" />
 				</condition>
 				<effect util="1">
-					<set var="a_m" value="Identify({X})" />
+					<set var="a_m" value="IdentifyProf({X})" />
+				</effect>
+			</case>
+         </rule>
+           
+         <rule id="identifyCourse">
+			<case>
+				<condition>
+					<if var="a_u" value="RequestCourse({X})" />
+				</condition>
+				<effect util="1">
+					<set var="a_m" value="IdentifyCourse({X})" />
 				</effect>
 			</case>
          </rule>
@@ -87,15 +91,6 @@
                </effect>
             </case>
          </rule>
-
-		<rule id ="negative">
-			<case>
-				<effect util="-0.5">
-					<set var="a_m" value="Identify(*)" />
-				</effect>
-			</case>
-		</rule>
-
 
 		<rule id="repeat">
 			<case>
@@ -113,13 +108,30 @@
 		<rule>
 			<case>
 				<condition>
-					<if var="a_m" value="Identify({X})" />
+					<if var="a_m" value="IdentifyProf({X})" />
 				</condition>
 				<effect util="1">
-					<set var="u_m" value="Ok, identified {X}" />
+					<set var="u_m" value="Ok, looking up information about Professor {X}." />
 				</effect>
 			</case>
-			<case>
+            <case>
+				<condition>
+					<if var="a_m" value="IdentifyCourse({X})" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="Ok, looking up information about {X}." />
+				</effect>
+			</case>
+
+            <case>
+               <condition>
+                  <if var="a_m" value="Confirm({X})" />
+               </condition>
+               <effect util="1">
+                    <set var="u_m" value="I'm sorry, you want {X} what?" />
+                 </effect>
+              </case>
+            <case>
 				<condition>
 					<if var="a_m" value="AskRepeat" />
 				</condition>
@@ -140,7 +152,7 @@
 				<condition>
 					<if var="a_m" value="AskRepeat" />
 				</condition>
-				<effect prob="0.95">
+				<effect prob="0.5">
 					<set var="a_u^p" value="{a_u}" />
 				</effect>
 			</case>
