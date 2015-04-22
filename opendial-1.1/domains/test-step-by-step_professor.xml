@@ -28,7 +28,7 @@
 			<case>
 				<condition>
                    <if var="u_u" value="(Professor)? {LastName}" relation="contains"/>
-                   <if var="LastName" relation="in" value="[Agarwal,Aho,Allen,Arabshian,Baset,Belhumeur,Bellovin,Biliris,Blaer,Burnside,Cannon,Carloni,Chaintreau,Chen,Choi,Chudnovsky,Collins,Creamer,Cui,Edwards,Elson,Fei,Feiner,Feldman,Galanter,Gravano,Grinspun,Gross]"/>
+                   <if var="LastName" relation="in" value="[Agarwal,Aho,Allen,Arabshian,Baset,Belhumeur,Bellovin,Biliris,Blaer,Burnside,Cannon,Carloni,Chaintreau,Chen,Choi,Chudnovsky,Collins,Creamer,Cui,Edwards,Elson,Fei,Feiner,Feldman,Galanter,Gravano,Grinspun,Gross,Habash,Hershkop,Hirschberg,Holliday,Huang,Isukapalli,Jebara,Kaiser,Kender,Keromytis,Kim,Lee,Leslie,Madduri,Malkin,Mauel,McKeown,Misra,Monteleoni,Morris,Nahum,Nayar,Nieh,Nowick,Papageorgiou,Pasik,Pe'er,Pender,Radev,Ramamoorthi,Reed,Ross,Rubenstein,Saraswat,Schulzrinne,Servedio,Sethumadhavan,Shaw,Sheth,Shortliffe,Sidorsky,Stein,Stolfo,Strickland,Traub,Unger,Vawdrey,Voris,Whalen,Wozniakowski,Yang,Yannkakis,Yee,Yemeni,Zhang,Zussman]"/>
 				</condition>
 				<effect>
                    <set var="a_u" value="RequestProf({LastName})" />
