@@ -1,0 +1,85 @@
+Honors Introduction to Computer Science (Java)
+Intro to Computer Science- Programming in C
+Intro to Computer Science- Programming in Java
+Intro to Computer Science- Programming in MATLAB
+Intro to Information Science
+Introduction to Computers
+Introduction to computer programming (Fortran)
+Object-Oriented Programming and Design in Java
+Introduction to Computer Science for Engineers/Applied Scientists - Python
+MIDI Music Production
+Advanced Programming
+Computational Linear Algebra
+Computer Science Theory: Computability - Models - Computation
+Data Structures and Algorithms
+Data Structures in C
+Data Structures in Java
+Digital Logic
+Discrete Mathematics
+Honors Data Structures and Algorithms
+Introduction to Software Engineering
+Programming Languages: C#
+Programming Languages: C++
+Programming Languages: Java
+Programming Languages: Java Scripting Languages
+Programming Languages: MATLAB
+Programming Languages: Python
+Scientific Computation I
+Fundamentals of Computer Organization
+Fundamentals of Computer Systems
+Ruby On Rails
+Introduction to Computer Applications in Health Care
+Computational Genomics
+Advanced Software Engineering
+Algorithms for Data Science
+Analysis of Algorithms I
+Artificial Intelligence
+Biometrics
+C++ programming For Derviatives Pricing
+Combinatorial Theory
+Combinatorial Theory
+Compilers
+Computational Aspects of Robotics
+Computer Animation
+Computer Graphics
+Computer Vision
+Graph Theory
+Introduction to Biomedical Informatics
+Introduction to Computational Complexity
+Introduction to Computational Learning Theory
+Introduction to Cryptography
+Introduction to Databases
+Introduction to Quantum Computing
+Machine Learning
+Natural Language Processing
+Network Security
+Numerical Algorithms and Complexity
+Operating Systems I
+Principles and Practices of Parallel Programming
+Programming and Problem Solving
+Programming Languages and Translators
+Security Architecture and Engineering
+Spoken Language Processing
+Topics in Computer Science: Intro to the Semantic Web
+Topics in Computer Science: Video Game Design and Production
+Topics in Computer Science: VoIP Security
+User Interface Design
+Advanced Logic Design
+Computer Architecture
+Computer Networks
+Advanced Cryptography
+Advanced Database Systems
+Advanced Internet Services
+Advanced Topics in Image-Based Rendering
+Cloud Computing
+Computer Vision and Machine Learning for Mobile Platforms
+Information Theory
+Search Engine Technology
+Sequential Logic Circuit
+Topics in Computer Science: Computational Approaches to Emotional Speech
+Topics in Computer Science: Computational Aspects of Geometric Design
+Topics in Computer Science: Machine Learning for NLP
+Topics in Computer Science: Machine Translation
+Topics in Computer Science: Search Engine Technology
+Topics in Computer Science: Social Networks
+Web-Enhanced Information Management
