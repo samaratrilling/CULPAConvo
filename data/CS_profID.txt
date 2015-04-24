@@ -81,9 +81,6 @@ Dawn Strickland,11575
 Apoorv Agarwal,12599
 Seung Choi,12619
 Jonathan Voris,12727
-Jonathan Voris,12728
-Jonathan Voris,12767
-Jonathan Voris,12783
 Xi Chen,12932
 Robert Holliday,12959
 Terence Pender,1586
