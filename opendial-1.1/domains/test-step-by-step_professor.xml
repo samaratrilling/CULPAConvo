@@ -2,7 +2,6 @@
 <domain>
 
    <initialstate>
-
       <variable id="u_m">
          <value>Welcome to CULPAConvo: CS Edition! You can ask about a professor or a course.
             Which would you like?
@@ -12,7 +11,7 @@
 
 	<!-- NLU model -->
 	<model trigger="u_u">
-
+<!-- comment change -->
        <!-- <rule id="ProfOrCourse">
            <case>
               <condition operator="or">
@@ -26,23 +25,16 @@
         </rule> -->
         <rule id="Professor">
 			<case>
-				<condition>
-                   <if var="u_u" value="(Professor)? {LastName}" relation="contains"/>
-                   <if var="LastName" relation="in" value="[Agarwal,Aho,Allen,Arabshian,Baset,Belhumeur,Bellovin,Biliris,Blaer,Burnside,Cannon,Carloni,Chaintreau,Chen,Choi,Chudnovsky,Collins,Creamer,Cui,Edwards,Elson,Fei,Feiner,Feldman,Galanter,Gravano,Grinspun,Gross]"/>
+               <condition>
+                   <if var="u_u" value="(Professor)? {FirstName} {LastName}" relation="contains"/>
+                   <if var="LastName" relation="in" value="[Agarwal,Aho,Allen,Arabshian,Baset,Belhumeur,Bellovin,Biliris,Blaer,Burnside,Cannon,Carloni,Chaintreau,Chen,Choi,Chudnovsky,Collins,Creamer,Cui,Edwards,Elson,Fei,Feiner,Feldman,Galanter,Gravano,Grinspun,Gross,Habash,Hershkop,Hirschberg,Holliday,Huang,Isukapalli,Jebara,Kaiser,Kender,Keromytis,Kim,Lee,Leslie,Madduri,Malkin,Mauel,McKeown,Misra,Monteleoni,Morris,Nahum,Nayar,Nieh,Nowick,Papageorgiou,Pasik,Pe'er,Pender,Radev,Ramamoorthi,Reed,Ross,Rubenstein,Saraswat,Schulzrinne,Servedio,Sethumadhavan,Shaw,Sheth,Shortliffe,Sidorsky,Stein,Stolfo,Strickland,Traub,Unger,Vawdrey,Voris,Whalen,Wozniakowski,Yang,Yannkakis,Yee,Yemeni,Zhang,Zussman]" />
+                   <if var="FirstName" relation="in" value="[Apoorv,Alfred,Peter,Knarig,Salman,Peter,Steven,Alexandros,Paul,Matthew,Adam,Luca,Augustin,Xi,Seung,Maria,Michael,German,Ang,Stephen,David,James,Steven,Jon,Eugene,Luis,Eitan,Philip,Jonathan,Nizar,Shlomo,Julia,Robert,Bert,Ramana,Tony,Gail,John,Angelos,Martha,Jae,Christina,Abishek,Tal,Kathleen,Vishal,Claire,Mitchell,Erich,Shree,Jason,Steven,Anargyros,Alexander,Itshack,Terence,Dragomir,Ravi,Ken,Daniel,Vijay,Henning,Rocco,Simha,Blake,Swapneel,Edward,Clifford,Salvatore,Emily,Dawn,Joseph,Gregory,Henryk,Junfeng,Mihalis,Bernard,Yechiam,John]" />
 				</condition>
 				<effect>
-                   <set var="a_u" value="RequestProf({LastName})" />
-				</effect>
+                   <set var="a_u" value="RequestProf({FirstName} {LastName})" />
+				</effect> 
+                <!-- TODO: give it something to do if the user doesn't say a first name.-->
 			</case>
-            <case>
-               <condition>
-                   <if var="u_u" value="Julia Hirschberg" relation="contains"/>
-                </condition>
-                <effect>
-                   <set var="a_u" value="RequestProf(Hirschberg)" />
-				</effect>
-             </case>
-
          </rule>
          <rule id="Course">
 			<case>

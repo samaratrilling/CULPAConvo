@@ -1,4 +1,4 @@
-package opendial.modules.examples.apimodule;
+package src.opendial.modules.examples.apimodule;
 import java.util.Collection;
 import opendial.DialogueSystem;
 import opendial.arch.DialException;
@@ -50,39 +50,39 @@ public class CULPAInfo implements Module {
          
          if (action.equals("ProfReview")) {
             String profName = state.queryProb("prof").toDiscrete().getBest().toString();
-            // String revoptions = return the "we found x positive and y negative reviews."
+             String revoptions = "we found x positive and y negative reviews.";
 
             String newAction="ReviewOptions(" + revoptions + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
          else if (action.equals("CourseReview")) {
-            String courseName = state.queryProb("course").toDiscrete().getBest().toString();
-            // String revoptions = return the "we found x positive and y negative reviews."
+             String courseName = state.queryProb("course").toDiscrete().getBest().toString();
+            String revoptions = "we found x positive and y negative reviews.";
 
             String newAction="ReviewOptions(" + revoptions + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
          else if (action.equals("ProfRecentReview")) {
             String profName = state.queryProb("prof").toDiscrete().getBest().toString();
-           // String recentReview = Get most recent review for profName
+            String recentReview = "most recent review";
             String newAction="RecentReview(" + recentReview + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
          else if (action.equals("ProfSummaryReview")) {
             String profName = state.queryProb("prof").toDiscrete().getBest().toString();
-           // String summaryReview = Get the sentiment summary
+            String summaryReview = "sentiment summary";
             String newAction="SummaryReview(" + summaryReview + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
          else if (action.equals("CourseRecentReview")) {
             String courseName = state.queryProb("course").toDiscrete().getBest().toString();
-           // String recentReview = Get most recent review for courseName
+            String recentReview = "most recent review for course";
             String newAction="RecentReview(" + recentReview + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
          else if (action.equals("CourseSummaryReview")) {
             String courseName = state.queryProb("course").toDiscrete().getBest().toString();
-           // String summaryReview = Get the sentiment summary
+            String summaryReview = "sentiment summary";
             String newAction="SummaryReview(" + summaryReview + ")";
             system.addContent(new Assignment("a_m", newAction));
          }
