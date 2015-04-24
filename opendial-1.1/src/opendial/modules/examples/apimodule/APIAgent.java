@@ -76,8 +76,6 @@ public class newAPIAgent {
     		  JSONObject review = reviews.getJSONObject(i);
     		  String review_txt = review.getString("review_text");   		  
     
-    		  //System.out.println(review_txt);
-    		  
     		  //call sentiment API to get polarity of review text
     		  String param = "text=" + URLEncoder.encode(review_txt, "UTF-8");
     		  String sentiment_jsonResponse = httpPost(sentiment_url, param);
