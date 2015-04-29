@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain>
+	<!-- Natural language generation models. The domain can produce new system 
+		utterance either when the current step is changed, or when a new system action 
+		is selected. -->
+
+
+	<model trigger="current_step">
+		<!--Model producing new system utterances when the current step is moved 
+			to a new step. -->
+
+		<!-- Asks for the professor -->
+		<rule>
+			<case>
+				<condition>
+					<if var="current_step" value="Professor" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="Please say the full name of the professor." />
+				</effect>
+			</case>
+		</rule>
+
+		<!-- Asks for the review options -->
+		<rule>
+			<case>
+				<condition>
+					<if var="current_step" value="ReviewOptions" />
+				</condition>
+				<effect util="1">
+					<set var="u_m"
+						value="How do you want to hear about {Destination}?" />
+				</effect>
+			</case>
+		</rule>
+
+	</model>
+
+
+	<model trigger="a_m">
+		<!-- Model producing new system utterances related to the last system action -->
+
+		<!-- grounding the destination -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="Ground(Professor,{Professor})" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="OK, looking up information about Professor {Professor}." />
+				</effect>
+			</case>
+		</rule>
+
+		<!-- grounding the departure -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="Ground(ReviewOptions,{RevOptions})" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="OK, I'll tell you {RevOptions}." />
+				</effect>
+			</case>
+		</rule>
+
+        <!-- confirmation request for the destination -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="Confirm(Professor,{Professor})" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="You want information on {Professor}. Is that correct?" />
+				</effect>
+			</case>
+		</rule>
+
+        <!-- repetition request -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="AskRepeat" />
+					<if var="current_step" value="Professor" />
+				</condition>
+				<effect util="1">
+					<set var="u_m"
+						value="Sorry, could you repeat? Say the whole name of the professor." />
+				</effect>
+			</case>
+	    	<case>
+				<condition>
+					<if var="a_m-prev" value="AskRepeat" />
+					<if var="a_m" value="AskRepeat" />
+				</condition>
+				<effect util="1">
+					<set var="u_m"
+						value="Sorry I couldn't understand you. Could you please repeat one more time?" />
+				</effect>
+			</case>
+			<case>
+				<condition>
+					<if var="a_m" value="AskRepeat" />
+				</condition>
+				<effect util="1">
+					<set var="u_m" value="Sorry, could you repeat?" />
+				</effect>
+			</case>
+		</rule>
+
+		<!-- Telling the user information -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="RelayInfo({Text})" />
+				</condition>
+				<effect util="1">
+					<set var="u_m"
+                       value="Here's your info: {Text}" />
+				</effect>
+			</case>
+	    </rule>
+
+		<!-- EXAMPLE: Grounding the booking -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="Ground(Booking)" />
+				</condition>
+				<effect util="1">
+					<set var="u_m"
+						value="OK, your tickets are now ordered and will be sent to you via email." />
+				</effect>
+			</case>
+		</rule>
+
+		
+	</model>
+
+</domain>

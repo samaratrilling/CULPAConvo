@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<domain>
+	<initialstate>
+		
+		<!-- Starting prompt -->
+		<variable id="u_m">
+			<value>Welcome to CULPAConvo: CS Edition! You can ask about any professor in the CS deparment just by saying their name. Try it!
+            </value>
+		</variable>
+		
+		<!-- We start the dialogue by asking for the destination -->
+		<variable id="current_step">
+			<value>Professor</value>
+		</variable>
+
+	</initialstate>
+
+	<!-- Natural language understanding models -->
+	<import href="professors_nlu.xml"/>
+
+	<!--  Dialogue management models (action selection and transition) -->
+	<import href="professors_dm.xml"/>
+
+	<!-- Natural language generation models -->
+	<import href="professors_nlg.xml"/>
+
+
+	<!-- External module showing how to interface the dialogue system with an external 
+	database (used here to find the ticket prices and "book" the tickets) -->
+	<settings>
+		<modules>opendial.modules.examples.apimodule.CULPAInfo</modules>
+	</settings>
+</domain>

@@ -22,7 +22,7 @@ public class APIAgent {
 
    public static void main (String[] args) {
       // Tester
-	  //System.out.println(query("reviews", "professor_id", "1957", "latest"));
+	  System.out.println(query("reviews", "professor_id", "1957", "latest"));
 	  //System.out.println(query("reviews", "professor_id", "1957", "numberReviews"));
 	  //System.out.println(query("reviews", "professor_id", "1957", "sentiment"));
 	  //System.out.println(query("reviews", "professor_id", "1957", "firstSentence"));
