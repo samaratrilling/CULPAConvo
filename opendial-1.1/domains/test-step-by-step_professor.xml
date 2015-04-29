@@ -3,8 +3,7 @@
 
    <initialstate>
       <variable id="u_m">
-         <value>Welcome to CULPAConvo: CS Edition! You can ask about a professor or a course.
-            Which would you like?
+         <value>Welcome to CULPAConvo: CS Edition! You can ask about any professor in the CS deparment just by saying their name. Try it!
          </value>
       </variable>
    </initialstate>
@@ -151,5 +150,9 @@
 		</rule>
 	</model>
 
-
+<!-- External module showing how to interface the dialogue system with an external 
+	database (used here to find the ticket prices and "book" the tickets) -->
+	<settings>
+		<modules>opendial.modules.examples.apimodule.CULPAInfo</modules>
+	</settings>
 </domain>

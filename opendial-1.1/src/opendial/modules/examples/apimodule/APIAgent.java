@@ -14,9 +14,9 @@ import org.json.simple.parser.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class newAPIAgent {
+public class APIAgent {
 
-   public newAPIAgent() {
+   public APIAgent() {
 
    }
 
@@ -33,6 +33,7 @@ public class newAPIAgent {
    public static String query(String endpoint, String searchBy, String searchTerm, String modifier) {
       String response = "";
       try {
+          
           // Build up the URL.
           String url = buildURL(endpoint, searchBy, searchTerm);
           String jsonResponse = httpGet(url);
