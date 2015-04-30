@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain>
+	<!-- Dialogue management models, composed of three models: an action selection 
+		model to find the best system action to execute, a transition model that 
+		specifies how the selected action modifies the current dialogue state, and 
+		a prediction model for the prior distributions on the destinations, 
+		departures and next user dialogue act. -->
+
+
+	<model trigger="Professor,ReviewOptions">
+		<!-- This model specifies the utilities of various system actions, such 
+			as clarification requests (repetitions and confirmations) and 
+			grounding actions. -->
+
+		<!-- If the current step is to ask for the destination, specifies the utilities 
+			of a confirmation request or a grounding action using the current value of 
+			the "Destination" slot -->
+		<rule>
+			<case>
+				<condition>
+					<if var="current_step" value="Professor" />
+				</condition>
+				<effect util="5">
+					<set var="a_m" value="Ground(Professor,{Professor})" />
+				</effect>
+				<effect util="0.5">
+					<set var="a_m" value="Confirm(Professor,{Professor})" />
+				</effect>
+			</case>
+            <case>
+               <condition>
+                  <if var="current_step" value="RelayInfo" />
+               </condition>
+               <effect util="5">
+                  <set var="a_m" value="Ground(Restart)" />
+               </effect>
+            </case>
+         </rule>
+
+
+        <!-- Specifies the utility of a repetition request -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_u" relation="!=" value="None" />
+				</condition>
+				<effect util="0.1">
+					<set var="a_m" value="AskRepeat" />
+				</effect>
+			</case>
+		</rule>
+
+		<!-- Specifies the "base" utility of all possible actions, in the absence 
+			of any other information (allows to set an implicit threshold on the system 
+			confidence before selecting a particular action). -->
+		<rule>
+			<case>
+				<effect util="-4.5">
+					<set var="a_m" value="Ground(*)" />
+				</effect>
+				<effect util="-0.3">
+					<set var="a_m" value="Confirm(*)" />
+				</effect>
+				<effect util="-0.03">
+					<set var="a_m" value="AskRepeat" />
+				</effect>
+			</case>
+		</rule>
+		
+		
+		<!-- Records the next-to-last system action -->
+		<rule>
+			<case>
+				<effect>
+					<set var="a_m-prev" value="{a_m}" />
+				</effect>
+			</case>
+		</rule>
+
+	</model>
+	
+	
+
+
+	<model trigger="a_m">
+		<!-- Transition model that specifies how the selection of a particular 
+			system action affects the current dialogue state, in particular the current 
+			step in the dialogue. -->
+
+		<!-- Moves to the next step if a particular slot has been confirmed -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="Ground(Professor,*)" />
+				</condition>
+				<effect prob="1">
+					<set var="current_step" value="ReviewOptions" />
+				</effect>
+             </case>
+			<case>
+				<condition>
+					<if var="a_m" value="Ground(Restart)" />
+				</condition>
+				<effect prob="1">
+					<set var="current_step" value="Professor" />
+					<set var="Professor" value="None" />
+					<set var="ReviewOptions" value="None" />
+				    <set var="a_u" value="None" />
+				</effect>
+			</case>
+	    </rule>
+
+
+		<!-- If the external module produces the system action MakeOffer(particular price),
+		registers the price in a separate variable and moves the current step. -->
+		<rule>
+			<case>
+				<condition>
+					<if var="a_m" value="MakeOffer({Price})" />
+				</condition>
+				<effect>
+					<set var="TotalCost" value="{Price}" />
+					<set var="current_step" value="MakeOffer" />
+				</effect>
+			</case>
+		<!-- If the number of tickets is grounded, update the total cost by multiplying the
+		price with the number of tickets. -->
+			<case>
+				<condition>
+					<if var="a_m" value="Ground(NbTickets,*)" />
+				</condition>
+				<effect>
+					<set var="TotalCost" value="{TotalCost}*{NbTickets}" />
+				</effect>
+			</case>
+		</rule>
+
+	</model>
+
+</domain>

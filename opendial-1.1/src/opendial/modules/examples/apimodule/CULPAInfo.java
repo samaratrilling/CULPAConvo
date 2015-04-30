@@ -11,6 +11,9 @@ public class CULPAInfo implements Module {
    DialogueSystem system;
    APIAgent agent;
    boolean paused = true;
+    // logger
+   public static Logger log = new Logger("CULPAConvo", Logger.Level.DEBUG);
+
 
    /**
     * Constructor for module
@@ -26,6 +29,7 @@ public class CULPAInfo implements Module {
     */
    @Override
    public void start() throws DialException {
+      log.info("START method called");
       paused = false;
    }
 
@@ -38,8 +42,12 @@ public class CULPAInfo implements Module {
     */
    @Override
    public void trigger(DialogueState state, Collection<String> updatedVars) {
+      log.info("got to the trigger method");
+      log.info("a_m = " + state.queryProb("a_m").toDiscrete().getBest().toString());
+
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
+         log.info("action variable = " + action);
 
          /*// Example
          String latestReview = agent.query("Reviews", "professsor_id", "10729", "latestReview");
@@ -47,7 +55,8 @@ public class CULPAInfo implements Module {
          system.addContent(new Assignment("a_m", newAction));
 
          // end example*/
-         
+        
+        //Here is where we have to check if the professor name (in "action") is the  
          if (action.equals("ProfReview")) {
             String profName = state.queryProb("prof").toDiscrete().getBest().toString();
              String revoptions = "we found x positive and y negative reviews.";

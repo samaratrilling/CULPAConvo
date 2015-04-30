@@ -3,8 +3,7 @@
 
    <initialstate>
       <variable id="u_m">
-         <value>Welcome to CULPAConvo: CS Edition! You can ask about a professor or a course.
-            Which would you like?
+         <value>Welcome to CULPAConvo: CS Edition! You can ask about any professor in the CS deparment just by saying their name. Try it!
          </value>
       </variable>
    </initialstate>
@@ -36,16 +35,6 @@
                 <!-- TODO: give it something to do if the user doesn't say a first name.-->
 			</case>
          </rule>
-         <rule id="Course">
-			<case>
-                <condition operator="or">
-                   <if var="u_u" value="NLP" relation="contains" />
-                </condition>
-                <effect prob="1">
-                   <set var="a_u" value="RequestCourse(NLP)" />
-                </effect>
-             </case>
-		</rule>
 	</model>
 
 	<!-- Action selection model -->
@@ -62,17 +51,6 @@
 			</case>
          </rule>
            
-         <rule id="identifyCourse">
-			<case>
-				<condition>
-					<if var="a_u" value="RequestCourse({X})" />
-				</condition>
-				<effect util="1">
-					<set var="a_m" value="IdentifyCourse({X})" />
-				</effect>
-			</case>
-         </rule>
-
          <rule id="confirm">
             <case>
                <condition>
@@ -106,15 +84,7 @@
 					<set var="u_m" value="Ok, looking up information about Professor {X}." />
 				</effect>
 			</case>
-            <case>
-				<condition>
-					<if var="a_m" value="IdentifyCourse({X})" />
-				</condition>
-				<effect util="1">
-					<set var="u_m" value="Ok, looking up information about {X}." />
-				</effect>
-			</case>
-
+         
             <case>
                <condition>
                   <if var="a_m" value="Confirm({X})" />
@@ -151,5 +121,9 @@
 		</rule>
 	</model>
 
-
+<!-- External module showing how to interface the dialogue system with an external 
+	database (used here to interact with all the APIs) -->
+	<settings>
+		<modules>opendial.modules.examples.apimodule.CULPAInfo</modules>
+	</settings>
 </domain>
