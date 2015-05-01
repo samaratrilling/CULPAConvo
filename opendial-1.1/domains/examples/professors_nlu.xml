@@ -30,12 +30,26 @@
                 <!-- TODO: give it something to do if the user doesn't say a first name.-->
 			</case>
          </rule>
+
+         <!-- Extracts review options. -->
+         <rule>
+            <case>
+               <condition>
+                  <if var="u_u" relation="contains" value="{SummaryType}" />
+                  <if var="SummaryType" relation="in"
+                     value="[Latest Review]" />
+               </condition>
+               <effect>
+                  <add var="a_u" value="Inform(SummaryType,{SummaryType})" />
+               </effect>
+            </case>
+         </rule>
  
          <!-- Extracts confirmations and disconfirmations -->
 		<rule>
 			<case>
 				<condition>
-					<if var="u_u" relation="contains" value="(yes|correct|exactly|sure|right)" />
+					<if var="u_u" relation="contains" value="(yes|correct|exactly|sure|right|yeah)" />
 				</condition>
 				<effect>
 					<add var="a_u" value="Confirm" />
@@ -43,7 +57,7 @@
 			</case>
 			<case>
 				<condition>
-					<if var="u_u" relation="contains" value="(no|nope|wrong)" />
+					<if var="u_u" relation="contains" value="(no|nope|wrong|false|nah)" />
 				</condition>
 				<effect>
 					<add var="a_u" value="Disconfirm" />
@@ -80,11 +94,22 @@
                     <if var="a_u" relation="contains" value="Inform(Professor,{FirstName},{LastName})" />
 				</condition>
 				<effect>
-                   <set var="{current_step}" value="{FirstName} {LastName}" />
+                   <set var="Professor" value="{FirstName} {LastName}" />
 				</effect>
 			</case>
 	    </rule>
-		
+
+        <rule>
+           <case>
+              <condition>
+                 <if var="current_step" value="ReviewOptions" />
+                 <if var="a_u" relation="contains" value="Inform(ReviewOptions,{ReviewOptions})" />
+              </condition>
+              <effect>
+                 <set var="ReviewOptions" value="{ReviewOptions}" />
+              </effect>
+           </case>
+        </rule>
 
 		<!-- If the last system action is a confirmation request and the user confirms the
 		information, also update the corresponding slot-->

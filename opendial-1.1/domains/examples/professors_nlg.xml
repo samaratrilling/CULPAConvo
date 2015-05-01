@@ -29,7 +29,7 @@
 				</condition>
 				<effect util="1">
 					<set var="u_m"
-						value="How do you want to hear about {Destination}?" />
+						value="How do you want to hear about {Professor}?" />
 				</effect>
 			</case>
 		</rule>
