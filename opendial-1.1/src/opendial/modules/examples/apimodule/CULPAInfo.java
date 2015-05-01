@@ -43,12 +43,29 @@ public class CULPAInfo implements Module {
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
           //DialogueSystem.log.info("Prof name is Michael Collins");
-          String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
-          String profID = agent.getProfID(profname);
-         // Example
-         String latestReview = agent.query("reviews", "professor_id", profID, "latestReview");
-         String newAction = "ReadReview(" + latestReview + ")";
-         system.addContent(new Assignment("a_m", newAction));
+          
+          //Action 1 Validate(professor) is check if prof name exists, if yes, Ground([rpfesspr, else Reject(professor)
+          //Action 2 ground(reviewoptions, reviewoptions) then return SpeakReviews(Review)
+          
+          if (action.equals("Validate(Professor)")) {
+              String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
+              String profID = agent.getProfID(profname);
+              if (profID.equals("0")) {
+                  String newAction = "Reject(Professor)";
+                  system.addContent(new Assignment("a_m", newAction));
+              } else {
+                  String newAction = "Ground(Professor)";
+                  system.addContent(new Assignment("a_m", newAction));
+              }
+          }
+          if (action.equals("Ground(ReviewOptions")) {
+              String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
+              String profID = agent.getProfID(profname);
+              String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
+              String review = agent.query("reviews", "professor_id", profID, revoption);
+              String newAction = "SpeakReviews(" + review + ")";
+              system.addContent(new Assignment("a_m", newAction));
+          }
 
          // end example
          
