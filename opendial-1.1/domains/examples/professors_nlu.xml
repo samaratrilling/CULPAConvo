@@ -35,12 +35,12 @@
          <rule>
             <case>
                <condition>
-                  <if var="u_u" relation="contains" value="{SummaryType}" />
-                  <if var="SummaryType" relation="in"
-                     value="[Latest Review]" />
+                  <if var="u_u" relation="contains" value="* {ReviewOptions}" />
+                  <if var="ReviewOptions" relation="in"
+                     value="[latestReview,summary,sentiment,keywords]" />
                </condition>
                <effect>
-                  <add var="a_u" value="Inform(SummaryType,{SummaryType})" />
+                  <add var="a_u" value="Inform(ReviewOptions,{ReviewOptions})" />
                </effect>
             </case>
          </rule>

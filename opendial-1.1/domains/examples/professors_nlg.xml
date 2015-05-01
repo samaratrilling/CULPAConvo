@@ -29,10 +29,46 @@
 				</condition>
 				<effect util="1">
 					<set var="u_m"
-						value="How do you want to hear about {Professor}?" />
+                       value="How do you want to hear about {Professor}? You can say latest review, summary, sentiment, or keywords." />
 				</effect>
 			</case>
 		</rule>
+
+        <rule>
+           <case>
+              <condition>
+                 <if var="current_step" value="MoreReviews" />
+              </condition>
+              <effect util="1">
+                 <set var="u_m"
+                    value="{Text} Would you like to hear more about this professor?" />
+              </effect>
+           </case>
+        </rule>
+
+        <rule>
+           <case>
+              <condition>
+                 <if var="current_step" value="Final" />
+              </condition>
+              <effect util="1">
+                 <set var="u_m"
+                    value="Would you like to quit?" />
+              </effect>
+           </case>
+        </rule>
+
+        <rule>
+           <case>
+              <condition>
+                 <if var="current_step" value="Close" />
+              </condition>
+              <effect util="1">
+                 <set var="u_m"
+                    value="Thanks for using CULPA Convo! Bye!" />
+              </effect>
+           </case>
+        </rule>
 
 	</model>
 

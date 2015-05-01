@@ -58,7 +58,7 @@ public class CULPAInfo implements Module {
                   system.addContent(new Assignment("a_m", newAction));
               }
           }
-          if (action.equals("Ground(ReviewOptions")) {
+          if (action.equals("Ground(ReviewOptions)")) {
               String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
               String profID = agent.getProfID(profname);
               String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
