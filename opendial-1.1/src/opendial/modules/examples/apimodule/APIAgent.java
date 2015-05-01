@@ -51,7 +51,6 @@ public class APIAgent {
           // Build up the URL.
           String url = buildURL(endpoint, searchBy, searchTerm);
           String jsonResponse = httpGet(url);
-	 // System.err.println(jsonResponse);
 	 // DialogueSystem.log.info("query=" + url);
 	  //DialogueSystem.log.info("response=" + jsonResponse);
 

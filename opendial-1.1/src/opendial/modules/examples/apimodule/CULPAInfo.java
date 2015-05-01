@@ -8,6 +8,7 @@ import opendial.arch.Logger;
 import opendial.datastructs.Assignment;
 import opendial.modules.Module;
 import opendial.state.DialogueState;
+import opendial.DialogueSystem;
 
 public class CULPAInfo implements Module {
    DialogueSystem system;
@@ -43,6 +44,8 @@ public class CULPAInfo implements Module {
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
           //DialogueSystem.log.info("Prof name is Michael Collins");
+ 	 DialogueSystem.log.info("in trigger, action = " + action);
+
           
           //Action 1 Validate(professor) is check if prof name exists, if yes, Ground([rpfesspr, else Reject(professor)
           //Action 2 ground(reviewoptions, reviewoptions) then return SpeakReviews(Review)
@@ -53,18 +56,22 @@ public class CULPAInfo implements Module {
               if (profID.equals("0")) {
                   String newAction = "Reject(Professor)";
                   system.addContent(new Assignment("a_m", newAction));
+	          DialogueSystem.log.info("a_m=" + newAction);
               } else {
                   String newAction = "Ground(Professor,"+profname+")";
                   system.addContent(new Assignment("a_m", newAction));
+	          DialogueSystem.log.info("a_m=" + newAction);
               }
           }
           if (action.equals("Ground(ReviewOptions)")) {
+	      DialogueSystem.log.info("grounding review options");
               String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
               String profID = agent.getProfID(profname);
               String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
               String review = agent.query("reviews", "professor_id", profID, revoption);
               String newAction = "SpeakReview(" + review + ")";
               system.addContent(new Assignment("a_m", newAction));
+	      DialogueSystem.log.info("a_m" + newAction);
           }
 
          // end example
@@ -78,12 +85,14 @@ public class CULPAInfo implements Module {
                      "Spoken Language Processing";
             String newAction="DisplayClasses(" + classes + ")";
             system.addContent(new Assignment("a_m", newAction));
+	    DialogueSystem.log.info("a_m=" + newAction);
          }
          else if (action.equals("FindClass")) {
             String className = state.queryProb("a_m").toDiscrete().getBest().toString();
             String classInfo = "9:10am, taught by a professor";
             String newAction="DisplayClass(" + className + " " + classInfo + ")";
             system.addContent(new Assignment("a_m", newAction));
+	    DialogueSystem.log.info("a_m=" + newAction);
          }
 	*/
       }
