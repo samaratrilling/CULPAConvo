@@ -23,7 +23,7 @@
                     <if var="a_m" value="None" />
 				</condition>
 				<effect util="5">
-                   <set var="a_m" value="Validate(Professor,{Professor})" />
+                   <set var="a_m" value="Validate(Professor)" />
 				</effect>
 				<effect util="0.5">
 					<set var="a_m" value="Confirm(Professor,{Professor})" />
@@ -39,7 +39,7 @@
             <case>
                <condition>
                   <if var="current_step" value="Professor" />
-                  <if var="a_m" value="RejectProfessor(Professor,{Professor})" />
+                  <if var="a_m" value="Reject(Professor)" />
                </condition>
                <effect util="5">
                   <set var="a_m" value="RetryProfessor" />
@@ -72,7 +72,7 @@
                   <if var="current_step" value="ReviewOptions" />
                </condition>
                <effect util="5">
-                  <set var="a_m" value="Ground(ReviewOptions,{ReviewOptions})" />
+                  <set var="a_m" value="Ground(ReviewOptions)" />
                </effect>
             </case>
          </rule>

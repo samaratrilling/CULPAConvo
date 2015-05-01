@@ -54,7 +54,7 @@ public class CULPAInfo implements Module {
                   String newAction = "Reject(Professor)";
                   system.addContent(new Assignment("a_m", newAction));
               } else {
-                  String newAction = "Ground(Professor)";
+                  String newAction = "Ground(Professor,"+profname+")";
                   system.addContent(new Assignment("a_m", newAction));
               }
           }
@@ -63,7 +63,7 @@ public class CULPAInfo implements Module {
               String profID = agent.getProfID(profname);
               String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
               String review = agent.query("reviews", "professor_id", profID, revoption);
-              String newAction = "SpeakReviews(" + review + ")";
+              String newAction = "SpeakReview(" + review + ")";
               system.addContent(new Assignment("a_m", newAction));
           }
 
