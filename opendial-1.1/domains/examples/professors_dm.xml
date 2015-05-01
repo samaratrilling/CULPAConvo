@@ -7,36 +7,135 @@
 		departures and next user dialogue act. -->
 
 
-	<model trigger="Professor,ReviewOptions">
+	<model trigger="Professor,ReviewOptions,MoreReviews,Final,Close">
 		<!-- This model specifies the utilities of various system actions, such 
 			as clarification requests (repetitions and confirmations) and 
-			grounding actions. -->
+            grounding actions. DO NOT change current_step in these rules,
+            ONLY change the value of a_m. -->
 
-		<!-- If the current step is to ask for the destination, specifies the utilities 
-			of a confirmation request or a grounding action using the current value of 
-			the "Destination" slot -->
+		<!-- If the current step is to ask for the professor,, specifies the utilities 
+			of a confirmation request or a validation action using the current value of 
+			the "Professor" slot. Only CULPAInfo can set Ground(Professor). -->
 		<rule>
 			<case>
 				<condition>
 					<if var="current_step" value="Professor" />
+                    <if var="a_m" value="None" />
 				</condition>
 				<effect util="5">
-					<set var="a_m" value="Ground(Professor,{Professor})" />
+                   <set var="a_m" value="Validate(Professor,{Professor})" />
 				</effect>
 				<effect util="0.5">
 					<set var="a_m" value="Confirm(Professor,{Professor})" />
 				</effect>
 			</case>
+         </rule>
+
+         <!-- If the current step is to ask for the professor, and CULPAInfo has
+              determined that the professor asked for is not legitimate, then
+                tell the user it wasn't valid and go back to asking them for
+                a professor name. --> 
+         <rule>
             <case>
                <condition>
-                  <if var="current_step" value="RelayInfo" />
+                  <if var="current_step" value="Professor" />
+                  <if var="a_m" value="RejectProfessor(Professor,{Professor})" />
                </condition>
                <effect util="5">
-                  <set var="a_m" value="Ground(Restart)" />
+                  <set var="a_m" value="RetryProfessor" />
                </effect>
             </case>
          </rule>
 
+         <!-- If the current step is to ask for the professor, and the system
+              wants the user to retry asking for the professor, reset the a_m
+                value so the next thing the system will do is ask for a prof name.
+        -->
+         <rule>
+            <case>
+               <condition>
+                  <if var="current_step" value="Professor" />
+                  <if var="a_m" value="RetryProfessor" />
+               </condition>
+               <effect util="5">
+                  <set var="a_m" value="None" />
+               </effect>
+            </case>
+         </rule>
+
+         <!-- If the current step is to ask how the user wants to hear reviews,
+              specifies the utilities of a confirmation request or a grounding
+            action using the current value of the "ReviewOptions" slot -->
+         <rule>
+            <case>
+               <condition>
+                  <if var="current_step" value="ReviewOptions" />
+               </condition>
+               <effect util="5">
+                  <set var="a_m" value="Ground(ReviewOptions,{ReviewOptions})" />
+               </effect>
+            </case>
+         </rule>
+
+         <!-- If the current step is to ask whether the user wants to hear more
+              reviews for that same professor and the user says yes, specifies
+            the utility of returning to the review options state. -->
+         <rule>
+             <case>
+               <condition>
+                  <if var="current_step" value="MoreReviews" />
+                  <if var="a_u" relation="contains" value="Confirm" />
+               </condition>
+               <effect util="5">
+                  <set var="a_m" value="Ground(MoreReviews)" />
+               </effect>
+            </case>
+         </rule>
+
+         <!-- If the current step is to ask whether the user wants to hear more
+              reviews for that same professor and the user says no, specifies
+            the utility of moving to the final quit or restart state. -->
+         <rule>
+            <case>
+               <condition>
+                  <if var="current_step" value="MoreReviews" />
+                  <if var="a_u" relation="contains" value="Disconfirm" />
+               </condition>
+               <effect util="5">
+                  <set var="a_m" value="Ground(Done)" />
+               </effect>
+            </case>
+         </rule>
+
+         <!-- If the current step is to ask whether the user wants to quit
+              and the user says yes, specifies the utility of closing the
+            interaction. -->
+         <rule>
+            <case>
+               <condition>
+                  <if var="current_step" value="Final" />
+                  <if var="a_u" relation="contains" value="Confirm" />
+               </condition>
+               <effect util="5">
+                  <set var="a_m" value="Ground(Close)" />
+               </effect>
+            </case>
+         </rule>
+
+         <!-- If the current step is to ask whether the user wants to quit
+              and the user says no, specifies the utility of restarting the
+            interaction. -->
+        <rule>
+           <case>
+              <condition>
+                 <if var="current_step" value="Final" />
+                 <if var="a_u" relation="contains" value="Disconfirm" />
+              </condition>
+              <effect util="5">
+                 <set var="a_m" value="Ground(Restart)" />
+              </effect>
+           </case>
+        </rule>
 
         <!-- Specifies the utility of a repetition request -->
 		<rule>
@@ -85,7 +184,7 @@
 	<model trigger="a_m">
 		<!-- Transition model that specifies how the selection of a particular 
 			system action affects the current dialogue state, in particular the current 
-			step in the dialogue. -->
+			step in the dialogue. HERE IS WHERE you can change current_step. -->
 
 		<!-- Moves to the next step if a particular slot has been confirmed -->
 		<rule>
@@ -97,6 +196,38 @@
 					<set var="current_step" value="ReviewOptions" />
 				</effect>
              </case>
+             <case>
+                <condition>
+                   <if var="a_m" value="SpeakReview(*)" />
+                </condition>
+                <effect prob="1">
+                   <set var="current_step" value="MoreReviews" />
+                </effect>
+             </case>
+             <case>
+                <condition>
+                   <if var="a_m" value="Ground(MoreReviews)" />
+                </condition>
+                <effect prob="1">
+                   <set var="current_step" value="ReviewOptions" />
+                </effect>
+             </case>
+             <case>
+                <condition>
+                   <if var="a_m" value="Ground(Done)" />
+                </condition>
+                <effect prob="1">
+                   <set var="current_step" value="Final" />
+                </effect>
+             </case>
+             <case>
+                <condition>
+                   <if var="a_m" value="Ground(Close)" />
+                </condition>
+                <effect prob="1">
+                   <set var="current_step" value="Close" />
+                </effect>
+             </case>
 			<case>
 				<condition>
 					<if var="a_m" value="Ground(Restart)" />
@@ -106,34 +237,10 @@
 					<set var="Professor" value="None" />
 					<set var="ReviewOptions" value="None" />
 				    <set var="a_u" value="None" />
+                    <set var="a_m" value="None" />
 				</effect>
 			</case>
 	    </rule>
-
-
-		<!-- If the external module produces the system action MakeOffer(particular price),
-		registers the price in a separate variable and moves the current step. -->
-		<rule>
-			<case>
-				<condition>
-					<if var="a_m" value="MakeOffer({Price})" />
-				</condition>
-				<effect>
-					<set var="TotalCost" value="{Price}" />
-					<set var="current_step" value="MakeOffer" />
-				</effect>
-			</case>
-		<!-- If the number of tickets is grounded, update the total cost by multiplying the
-		price with the number of tickets. -->
-			<case>
-				<condition>
-					<if var="a_m" value="Ground(NbTickets,*)" />
-				</condition>
-				<effect>
-					<set var="TotalCost" value="{TotalCost}*{NbTickets}" />
-				</effect>
-			</case>
-		</rule>
 
 	</model>
 
