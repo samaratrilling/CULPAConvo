@@ -1,5 +1,7 @@
 package opendial.modules.examples.apimodule;
 import java.util.Collection;
+import java.util.*;
+import java.io.*;
 import opendial.DialogueSystem;
 import opendial.arch.DialException;
 import opendial.arch.Logger;
@@ -16,7 +18,7 @@ public class CULPAInfo implements Module {
     * Constructor for module
     * @param system the dialogue system to which the module should be attached
     */
-   public CULPAInfo(DialogueSystem system) {
+   public CULPAInfo(DialogueSystem system) throws IOException {
       this.system = system;
       this.agent = new APIAgent();
    }
@@ -40,9 +42,11 @@ public class CULPAInfo implements Module {
    public void trigger(DialogueState state, Collection<String> updatedVars) {
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
-
+          //DialogueSystem.log.info("Prof name is Michael Collins");
+          String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
+          String profID = agent.getProfID(profname);
          // Example
-         String latestReview = agent.query("reviews", "professor_id", "10729", "latestReview");
+         String latestReview = agent.query("reviews", "professor_id", profID, "latestReview");
          String newAction = "ReadReview(" + latestReview + ")";
          system.addContent(new Assignment("a_m", newAction));
 

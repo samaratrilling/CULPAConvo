@@ -1,5 +1,6 @@
 package opendial.modules.examples.apimodule;
 import java.io.*;
+import java.util.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.JSONObject;
@@ -8,17 +9,40 @@ import org.json.JSONException;
 import opendial.DialogueSystem;
 
 public class APIAgent {
-
-   public APIAgent() {
+    Map<String, String> profIDs = new HashMap<String, String>();
+    
+   public APIAgent() throws IOException {
+       String cwd = System.getProperty("user.dir");
+       String[] dirs = cwd.split("opendial-1.1");
+       String filename = dirs[0] + "data/CS_profID.txt";
+       System.out.println(filename);
+       try {
+           BufferedReader br = new BufferedReader(new FileReader(new File(filename)));
+           while (br.ready()) {
+               String str = br.readLine();
+               String[] input = str.split(",");
+               profIDs.put(input[0], input[1]);
+           }
+       } catch (FileNotFoundException fe) {
+           System.out.println("Error: Couldn't find data file.");
+       }
 
    }
 
    public static void main (String[] args) {
       // Tester
-	//  System.out.println(query("reviews", "professor_id", "1957", "latest"));
+      // String id = getProfID("Michael Collins");
+      // System.out.println(query("reviews", "professor_id", id, "latest"));
 	 
    }
 
+    public String getProfID(String profName) {
+        if (profIDs.containsKey(profName)) {
+            return profIDs.get(profName);
+        } else {
+            return "0";
+        }
+    }
    
    public static String query(String endpoint, String searchBy, String searchTerm, String modifier) {
       String response = "";
@@ -31,7 +55,7 @@ public class APIAgent {
 	  //DialogueSystem.log.info("response=" + jsonResponse);
 
           response = parseResponse(jsonResponse, modifier);
-	  DialogueSystem.log.info("response=" + response);
+          DialogueSystem.log.info("response=" + response);
       }
       catch (IOException ioe) {
          ioe.printStackTrace();
