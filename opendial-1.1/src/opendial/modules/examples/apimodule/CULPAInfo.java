@@ -1,5 +1,7 @@
 package opendial.modules.examples.apimodule;
 import java.util.Collection;
+import java.util.*;
+import java.io.*;
 import opendial.DialogueSystem;
 import opendial.arch.DialException;
 import opendial.arch.Logger;
@@ -16,7 +18,7 @@ public class CULPAInfo implements Module {
     * Constructor for module
     * @param system the dialogue system to which the module should be attached
     */
-   public CULPAInfo(DialogueSystem system) {
+   public CULPAInfo(DialogueSystem system) throws IOException {
       this.system = system;
       this.agent = new APIAgent();
    }
@@ -40,11 +42,30 @@ public class CULPAInfo implements Module {
    public void trigger(DialogueState state, Collection<String> updatedVars) {
       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
-
-         // Example
-         String latestReview = agent.query("reviews", "professor_id", "10729", "latestReview");
-         String newAction = "ReadReview(" + latestReview + ")";
-         system.addContent(new Assignment("a_m", newAction));
+          //DialogueSystem.log.info("Prof name is Michael Collins");
+          
+          //Action 1 Validate(professor) is check if prof name exists, if yes, Ground([rpfesspr, else Reject(professor)
+          //Action 2 ground(reviewoptions, reviewoptions) then return SpeakReviews(Review)
+          
+          if (action.equals("Validate(Professor)")) {
+              String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
+              String profID = agent.getProfID(profname);
+              if (profID.equals("0")) {
+                  String newAction = "Reject(Professor)";
+                  system.addContent(new Assignment("a_m", newAction));
+              } else {
+                  String newAction = "Ground(Professor)";
+                  system.addContent(new Assignment("a_m", newAction));
+              }
+          }
+          if (action.equals("Ground(ReviewOptions")) {
+              String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
+              String profID = agent.getProfID(profname);
+              String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
+              String review = agent.query("reviews", "professor_id", profID, revoption);
+              String newAction = "SpeakReviews(" + review + ")";
+              system.addContent(new Assignment("a_m", newAction));
+          }
 
          // end example
          
