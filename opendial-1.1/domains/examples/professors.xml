@@ -11,7 +11,7 @@
 		
 		<!-- We start the dialogue by asking for the destination -->
 		<variable id="current_step">
-			<value>Professor</value>
+			<value>start</value>
 		</variable>
 
 	</initialstate>
