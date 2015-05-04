@@ -171,18 +171,7 @@
             </case>
         </rule>
 
-		<!-- EXAMPLE: Grounding the booking -->
-		<rule>
-			<case>
-				<condition>
-					<if var="a_m" value="Ground(Booking)" />
-				</condition>
-				<effect util="1">
-					<set var="u_m"
-						value="OK, your tickets are now ordered and will be sent to you via email." />
-				</effect>
-			</case>
-		</rule>
+    
 
 		
 	</model>

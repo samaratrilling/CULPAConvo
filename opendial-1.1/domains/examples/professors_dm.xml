@@ -71,7 +71,7 @@
             <case>
                <condition>
                   <if var="current_step" value="ReviewOptions" />
-               </condition>
+                </condition>
                <effect util="5">
                   <set var="a_m" value="Ground(ReviewOptions)" />
                </effect>
@@ -89,6 +89,7 @@
                </condition>
                <effect util="5">
                   <set var="a_m" value="Ground(MoreReviews)" />
+                   
                </effect>
             </case>
          </rule>
@@ -201,11 +202,12 @@
         <rule>
              <case>
                 <condition>
-                   <if var="a_m" value="SpeakReview({Text})" />
+                   <if var="a_m" value="SpeakReview({Words})" />
                 </condition>
                 <effect prob="1">
-                   <set var="Text" value="{Text}" />
-                   <set var="current_step" value="MoreReviews" />
+                    <set var="current_step" value="MoreReviews" />
+                   <set var="Text" value="{Words}" />
+
                 </effect>
              </case>
         </rule>
@@ -245,7 +247,7 @@
 					<if var="a_m" value="Ground(Restart)" />
 				</condition>
 				<effect prob="1">
-					<set var="current_step" value="Professor" />
+					<set var="current_step" value="start" />
 					<set var="Professor" value="None" />
 					<set var="ReviewOptions" value="None" />
 				    <set var="a_u" value="None" />

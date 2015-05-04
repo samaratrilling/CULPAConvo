@@ -40,7 +40,7 @@
                   <if var="u_u" relation="contains" value="latest (review)?" />
                </condition>
                <effect>
-                  <add var="a_u" value="Inform(ReviewOptions,latestReview)" />
+                  <set var="a_u" value="Inform(ReviewOptions,latestReview)" />
                </effect>
             </case>
          </rule>
@@ -50,7 +50,7 @@
                      <if var="u_u" relation="contains" value="summary" />
                  </condition>
                  <effect>
-                     <add var="a_u" value="Inform(ReviewOptions,summary)" />
+                     <set var="a_u" value="Inform(ReviewOptions,summary)" />
                  </effect>
              </case>
         </rule>
@@ -60,7 +60,7 @@
                     <if var="u_u" relation="contains" value="keywords" />
                 </condition>
                 <effect>
-                    <add var="a_u" value="Inform(ReviewOptions,keywords)" />
+                    <set var="a_u" value="Inform(ReviewOptions,keywords)" />
                 </effect>
             </case>
         </rule>
@@ -70,7 +70,7 @@
                     <if var="u_u" relation="contains" value="sentiment" />
                 </condition>
                 <effect>
-                    <add var="a_u" value="Inform(ReviewOptions,sentiment)" />
+                    <set var="a_u" value="Inform(ReviewOptions,sentiment)" />
                 </effect>
             </case>
         </rule>
@@ -97,7 +97,7 @@
 		</rule>
 
 		<!-- Rule of lower priority that associates the dialogue act to "Other"
-		    if nothing else is recognised. -->
+		    if nothing else is recognised. 
 		<rule priority="2">
 			<case>
 				<condition>
@@ -107,7 +107,7 @@
 					<add var="a_u" value="Other" />
 				</effect>
 			</case>
-		</rule>
+		</rule>-->
 
 	</model>
 	
@@ -133,13 +133,46 @@
         <rule>
            <case>
               <condition>
-                 <if var="current_step" value="ReviewOptions" />
-                 <if var="a_u" relation="contains" value="Inform(ReviewOptions,{ReviewOptions})" />
+                <!-- <if var="current_step" value="ReviewOptions" />-->
+                 <if var="a_u" relation="contains" value="Inform(ReviewOptions,keywords)" />
               </condition>
               <effect>
-                 <set var="ReviewOptions" value="{ReviewOptions}" />
+                 <set var="ReviewOptions" value="keywords" />
               </effect>
            </case>
+        </rule>
+        <rule>
+            <case>
+                <condition>
+                    <!-- <if var="current_step" value="ReviewOptions" />-->
+                    <if var="a_u" relation="contains" value="Inform(ReviewOptions,sentiment)" />
+                </condition>
+                <effect>
+                    <set var="ReviewOptions" value="sentiment" />
+                </effect>
+            </case>
+        </rule>
+        <rule>
+            <case>
+                <condition>
+                    <!-- <if var="current_step" value="ReviewOptions" />-->
+                    <if var="a_u" relation="contains" value="Inform(ReviewOptions,summary)" />
+                </condition>
+                <effect>
+                    <set var="ReviewOptions" value="summary" />
+                </effect>
+            </case>
+        </rule>
+        <rule>
+            <case>
+                <condition>
+                    <!-- <if var="current_step" value="ReviewOptions" />-->
+                    <if var="a_u" relation="contains" value="Inform(ReviewOptions,latestReview)" />
+                </condition>
+                <effect>
+                    <set var="ReviewOptions" value="latestReview" />
+                </effect>
+            </case>
         </rule>
 
 		<!-- If the last system action is a confirmation request and the user confirms the

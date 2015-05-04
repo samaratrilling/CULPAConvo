@@ -55,7 +55,7 @@ public class APIAgent {
 	  //DialogueSystem.log.info("response=" + jsonResponse);
 
           response = parseResponse(jsonResponse, modifier);
-          DialogueSystem.log.info("response=" + response);
+         // DialogueSystem.log.info("response=" + response);
       }
       catch (IOException ioe) {
          ioe.printStackTrace();

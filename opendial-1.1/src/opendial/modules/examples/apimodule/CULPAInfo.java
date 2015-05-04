@@ -41,7 +41,12 @@ public class CULPAInfo implements Module {
     */
    @Override
    public void trigger(DialogueState state, Collection<String> updatedVars) {
-      if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
+       DialogueSystem.log.info("Current step is: " + state.queryProb("current_step").toDiscrete().getBest().toString());
+        DialogueSystem.log.info("a_u: " + state.queryProb("a_u").toDiscrete().getBest().toString());
+        DialogueSystem.log.info("a_m: " + state.queryProb("a_m").toDiscrete().getBest().toString());
+
+       
+       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
          String action = state.queryProb("a_m").toDiscrete().getBest().toString();
           //DialogueSystem.log.info("Prof name is Michael Collins");
  	 DialogueSystem.log.info("in trigger, action = " + action);
@@ -74,7 +79,7 @@ public class CULPAInfo implements Module {
               DialogueSystem.log.info("Review: " + review);
               String newAction = "SpeakReview(" + review + ")";
               system.addContent(new Assignment("a_m", newAction));
-	      DialogueSystem.log.info("a_m" + newAction);
+              DialogueSystem.log.info("a_m" + newAction);
           }
 
          // end example
