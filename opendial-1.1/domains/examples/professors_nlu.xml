@@ -35,15 +35,44 @@
          <rule>
             <case>
                <condition>
-                  <if var="u_u" relation="contains" value="* {ReviewOptions}" />
-                  <if var="ReviewOptions" relation="in"
-                     value="[latestReview,summary,sentiment,keywords]" />
+                  <if var="u_u" relation="contains" value="latest (review)?" />
                </condition>
                <effect>
-                  <add var="a_u" value="Inform(ReviewOptions,{ReviewOptions})" />
+                  <add var="a_u" value="Inform(ReviewOptions,latestReview)" />
                </effect>
             </case>
          </rule>
+        <rule>
+             <case>
+                 <condition>
+                     <if var="u_u" relation="contains" value="summary" />
+                 </condition>
+                 <effect>
+                     <add var="a_u" value="Inform(ReviewOptions,summary)" />
+                 </effect>
+             </case>
+        </rule>
+        <rule>
+            <case>
+                <condition>
+                    <if var="u_u" relation="contains" value="keywords" />
+                </condition>
+                <effect>
+                    <add var="a_u" value="Inform(ReviewOptions,keywords)" />
+                </effect>
+            </case>
+        </rule>
+        <rule>
+            <case>
+                <condition>
+                    <if var="u_u" relation="contains" value="sentiment" />
+                </condition>
+                <effect>
+                    <add var="a_u" value="Inform(ReviewOptions,sentiment)" />
+                </effect>
+            </case>
+        </rule>
+
  
          <!-- Extracts confirmations and disconfirmations -->
 		<rule>

@@ -196,6 +196,8 @@
 					<set var="current_step" value="ReviewOptions" />
 				</effect>
              </case>
+        </rule>
+        <rule>
              <case>
                 <condition>
                    <if var="a_m" value="SpeakReview({Text})" />
@@ -205,6 +207,8 @@
                    <set var="current_step" value="MoreReviews" />
                 </effect>
              </case>
+        </rule>
+        <rule>
              <case>
                 <condition>
                    <if var="a_m" value="Ground(MoreReviews)" />
@@ -213,6 +217,8 @@
                    <set var="current_step" value="ReviewOptions" />
                 </effect>
              </case>
+        </rule>
+        <rule>
              <case>
                 <condition>
                    <if var="a_m" value="Ground(Done)" />
@@ -221,6 +227,8 @@
                    <set var="current_step" value="Final" />
                 </effect>
              </case>
+        </rule>
+        <rule>
              <case>
                 <condition>
                    <if var="a_m" value="Ground(Close)" />
@@ -229,6 +237,8 @@
                    <set var="current_step" value="Close" />
                 </effect>
              </case>
+        </rule>
+        <rule>
 			<case>
 				<condition>
 					<if var="a_m" value="Ground(Restart)" />

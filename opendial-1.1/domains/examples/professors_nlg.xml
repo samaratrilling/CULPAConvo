@@ -42,6 +42,7 @@
               <effect util="1">
                  <set var="u_m"
                     value="{Text} Would you like to hear more about this professor?" />
+
               </effect>
            </case>
         </rule>
@@ -92,10 +93,10 @@
 		<rule>
 			<case>
 				<condition>
-					<if var="a_m" value="Ground(ReviewOptions,{RevOptions})" />
+					<if var="a_m" value="Ground(ReviewOptions)" />
 				</condition>
 				<effect util="1">
-					<set var="u_m" value="OK, I'll tell you {RevOptions}." />
+					<set var="u_m" value="OK, I'll tell you {ReviewOptions}." />
 				</effect>
 			</case>
 		</rule>

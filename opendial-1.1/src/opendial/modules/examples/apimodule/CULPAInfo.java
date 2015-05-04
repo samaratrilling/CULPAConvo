@@ -68,7 +68,10 @@ public class CULPAInfo implements Module {
               String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
               String profID = agent.getProfID(profname);
               String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
+              DialogueSystem.log.info("ReviewOptions: " + revoption);
+              
               String review = agent.query("reviews", "professor_id", profID, revoption);
+              DialogueSystem.log.info("Review: " + review);
               String newAction = "SpeakReview(" + review + ")";
               system.addContent(new Assignment("a_m", newAction));
 	      DialogueSystem.log.info("a_m" + newAction);
