@@ -118,7 +118,11 @@ public class APIAgent {
     		  String review_txt = review.getString("review_text");   		  
         		  
     		  //call parsing API to get parse of review text
-    		  String param = "text=" + URLEncoder.encode(review_txt, "UTF-8");
+    		  
+    		  // first, get first 2,000 characters
+    		  String sub_txt = review_txt.substring(0, Math.min(review_txt.length(), 2000));
+    		  
+    		  String param = "text=" + URLEncoder.encode(sub_txt, "UTF-8");
     		  String parsing_jsonResponse = httpPost(parsing_url, param);
     		  
     		  JSONObject obj2 = new JSONObject(parsing_jsonResponse);
