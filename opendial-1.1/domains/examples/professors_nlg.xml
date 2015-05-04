@@ -165,7 +165,7 @@
                     <if var="a_m" value="Reject(Professor)" />
                 </condition>
                 <effect>
-                    <set var="u_m" value="This professor doesn't exist. />
+                    <set var="u_m" value="This professor doesn't exist." />
                     <set var="current_step" value="start" />
                 </effect>
             </case>
