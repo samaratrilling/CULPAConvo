@@ -59,6 +59,7 @@
                </condition>
                <effect util="5">
                   <set var="a_m" value="None" />
+                   <set var="Professor" value="None" />
                </effect>
             </case>
          </rule>
