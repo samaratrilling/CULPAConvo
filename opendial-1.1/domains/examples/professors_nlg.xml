@@ -98,7 +98,7 @@
 					<if var="a_m" value="Ground(ReviewOptions)" />
 				</condition>
 				<effect util="1">
-					<set var="u_m" value="OK, I'll tell you {ReviewOptions}." />
+					<set var="u_m" value="OK, I'll tell you the {ReviewOptions}." />
 				</effect>
 			</case>
 		</rule>

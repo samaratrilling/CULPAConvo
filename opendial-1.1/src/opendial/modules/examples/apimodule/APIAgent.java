@@ -84,6 +84,8 @@ public class APIAgent {
     	 String latest_review_txt = review.getString("review_text");
     	 
     	 response = latest_review_txt;
+        String[] responses = response.split("\n");
+          response = responses[0].trim();
       }
       else if (modifier.equals("numberReviews")) {
          JSONArray reviews = obj.getJSONArray("reviews");
@@ -102,7 +104,7 @@ public class APIAgent {
      	    String firstSentence = review_txt.split("\\.")[0];
      	    response += firstSentence + ". ";
   	 }
-     	 
+          response = response.trim();
        }
        
       else if (modifier.equals("keywords")) {
@@ -140,6 +142,9 @@ public class APIAgent {
        	      
 
     	  }
+              response = response.trim();
+              response = response.substring(0,response.length() - 1);
+              response = response + ".";
     	  
           
     	  }
