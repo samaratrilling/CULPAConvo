@@ -107,14 +107,14 @@ public class APIAgent {
           response = response.trim();
        }
        
-      else if (modifier.equals("keywords")) {
+      else if (modifier.equals("adjectives")) {
     	  response = "";
     	      	  
     	  try{
     	  String parsing_url = "http://text-processing.com/api/tag/";
     	  
     	  JSONArray reviews = obj.getJSONArray("reviews");
-              	  
+    	  Integer count = 0;
     	  for (int i=0; i<reviews.length(); i++){
     		  JSONObject review = reviews.getJSONObject(i);
     		  String review_txt = review.getString("review_text");   		  
@@ -131,20 +131,32 @@ public class APIAgent {
     		  String text = obj2.getString("text");
     		  
        	      String[] parts = text.split("\\n");
+       	      
        	      for (int j=0; j<parts.length; j++){
        	    	  if (parts[j].endsWith("/JJ")){
-       	    		  //System.out.println(parts[j]);
        	    		  String adj = parts[j].split("\\/")[0];
-       	    		  response += adj + ", ";
+       	    		  String next = parts[j+1].split("\\/")[0];
        	    		  
+       	    		  // adj + noun
+       	    		 if (parts[j+1].endsWith("/NN")  && next.length() > 2 && Character.isLetter(next.charAt(2)) ){
+       	    			System.out.println(adj + " " + next);
+       	    			String new_adj = adj + " " + next;
+       	    			// limit to words with >2 letters
+       	    			if (response.indexOf(new_adj) == -1 && adj.length() > 4 && next.length() > 4){
+       	    		  	  if (count < 10){	// stop when get to 10
+             	    		  response += new_adj + ", ";
+             	    		  count += 1;
+             	    		  
+             	    		  }
+             	    		  System.out.println(count.toString());
+       	    			}
+       	    			
+       	    		  }
+       	    		 
        	    	  }
        	      }
-       	      
 
     	  }
-              response = response.trim();
-              response = response.substring(0,response.length() - 1);
-              response = response + ".";
     	  
           
     	  }
