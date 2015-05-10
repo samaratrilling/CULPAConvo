@@ -98,14 +98,9 @@ public class APIAgent {
          response = "";
          JSONArray reviews = obj.getJSONArray("reviews");
          int maxReviews = 0;
-         if (reviews.length() <=5) {
-            maxReviews = reviews.length();
-         }
-         else {
-            maxReviews = 5;
-         }
+         maxReviews = Math.min(reviews.length(), 5);
 
-         for (int i=0; i<=maxReviews; i++){
+         for (int i=0; i<maxReviews; i++){
             JSONObject review = reviews.getJSONObject(i);
             String review_txt = review.getString("review_text");  
             String firstSentence = review_txt.split("\\.")[0];
@@ -150,18 +145,26 @@ public class APIAgent {
                String[] parts = text.split("\\n");
 
                for (int j=0; j<parts.length; j++){
+                  //early exit
+                  if (count > 9) {
+                     break;
+                  }
                   if (parts[j].endsWith("/JJ")){
-                     String adj = parts[j].split("\\/")[0];
-                     String next = parts[j+1].split("\\/")[0];
-
+                     String adj = parts[j].split("\\/")[0].trim();
+                     String next = parts[j+1].split("\\/")[0].trim();
                      // adj + noun
                      if (parts[j+1].endsWith("/NN")  && next.length() > 2 && Character.isLetter(next.charAt(2)) ){
-                        System.out.println(adj + " " + next);
                         String new_adj = adj + " " + next;
                         // limit to words with >2 letters
                         if (response.indexOf(new_adj) == -1 && adj.length() > 4 && next.length() > 4){
-                           if (count < 10){	// stop when get to 10
+
+                           if (count < 9){	// stop when get to 10
                               response += new_adj + ", ";
+                              count += 1;
+                           }
+                           //end with a period not a comma
+                           else if (count == 9) {
+                              response += new_adj + ".";
                               count += 1;
                            }
                            System.out.println(count.toString());
@@ -170,6 +173,7 @@ public class APIAgent {
                   }
                }
             }
+
          }
          catch (IOException ioe) {
             ioe.printStackTrace();
@@ -213,6 +217,13 @@ public class APIAgent {
 
       }
 
+      // If the professor has less than 10 possible sentences, the
+      // string won't end in a period, so we add one here.
+      response = response.trim();
+      if (response.endsWith(",")) {
+         response = response.substring(0, response.length() - 1);
+         response = response + ".";
+      }
 
       return response;
    }
