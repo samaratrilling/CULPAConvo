@@ -5,7 +5,7 @@
 		
 		<!-- Starting prompt -->
 		<variable id="u_m">
-			<value>Welcome to CULPAConvo: CS Edition! You can ask about any professor in the CS deparment just by saying their name. Try it!
+			<value>Welcome to CULPAConvo: CS Edition! You can ask about any professor in the CS department just by saying their name. Try it!
             </value>
 		</variable>
 		
