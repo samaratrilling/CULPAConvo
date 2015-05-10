@@ -124,7 +124,7 @@ public class APIAgent {
          response = response.trim();
       }
 
-      else if (modifier.equals("adjectives")) {
+      else if (modifier.equals("keywords")) {
          response = "";
 
          try{
