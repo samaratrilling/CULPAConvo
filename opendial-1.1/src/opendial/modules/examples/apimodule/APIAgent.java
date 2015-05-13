@@ -12,6 +12,9 @@ import opendial.DialogueSystem;
 public class APIAgent {
    Map<String, String> profIDs = new HashMap<String, String>();
 
+   /**
+    * API Agent constructor
+    */
    public APIAgent() throws IOException {
       String cwd = System.getProperty("user.dir");
       String[] dirs = cwd.split("opendial-1.1");
@@ -30,13 +33,12 @@ public class APIAgent {
 
    }
 
-   public static void main (String[] args) {
-      // Tester
-      // String id = getProfID("Michael Collins");
-      // System.out.println(query("reviews", "professor_id", id, "latest"));
-
-   }
-
+   /**
+    * Given a full professor name, returns the professor
+    * ID for API queries.
+    * @param profName the full name of the professor
+    * @return the professor ID, or "0" if not found.
+    */
    public String getProfID(String profName) {
       if (profIDs.containsKey(profName)) {
          return profIDs.get(profName);
@@ -45,6 +47,15 @@ public class APIAgent {
       }
    }
 
+   /**
+    * Build the URL query to access the correct CULPA API
+    * endpoint.
+    * @param endpoint The API endpoint
+    * @param searchBy The type of identifying information to give to the API
+    * @param searchTerm The identifying information itself
+    * @param modifier Any modifier necessary
+    * @return the full URL
+    */
    public static String query(String endpoint, String searchBy, String searchTerm, String modifier) {
       String response = "";
       try {
@@ -66,14 +77,29 @@ public class APIAgent {
       return response; 
    }
 
-   public static String buildURL(String endpoint, String searchBy, 
-         String searchTerm){
+   /**
+    * Build the URL query to access the correct CULPA API
+    * endpoint.
+    * @param endpoint
+    * @param searchBy
+    * @param searchTerm
+    * @return the full URL
+    */
+   public static String buildURL(String endpoint, String searchBy, String searchTerm){
       String base = "http://api.culpa.info";
       String url = base + "/" + endpoint + "/" + searchBy + "/" + searchTerm;
       return url;
    }
 
-   public static String parseResponse(String jsonSrc, String modifier) throws JSONException {
+   /**
+    * Parses the JSON response according to the type of information
+    * the user has requested (summary, full review, etc)
+    * @param jsonSrc
+    * @param modifier the type of information the user has requested
+    * @return the full information to be spoken to the user.
+    */
+   public static String parseResponse(String jsonSrc,
+         String modifier) throws JSONException {
       JSONObject obj = new JSONObject(jsonSrc);
       String response = "";
 
@@ -123,7 +149,8 @@ public class APIAgent {
          response = "";
 
          try{
-            String parsing_url = "http://text-processing.com/api/tag/";
+            String parsing_url = 
+               "http://text-processing.com/api/tag/";
 
             JSONArray reviews = obj.getJSONArray("reviews");
             Integer count = 0;
@@ -134,12 +161,16 @@ public class APIAgent {
                //call parsing API to get parse of review text
 
                // first, get first 2,000 characters
-               String sub_txt = review_txt.substring(0, Math.min(review_txt.length(), 2000));
+               String sub_txt = review_txt.substring(0, 
+                     Math.min(review_txt.length(), 2000));
 
-               String param = "text=" + URLEncoder.encode(sub_txt, "UTF-8");
-               String parsing_jsonResponse = httpPost(parsing_url, param);
+               String param = "text=" + URLEncoder.encode(sub_txt, 
+                     "UTF-8");
+               String parsing_jsonResponse = httpPost(parsing_url, 
+                     param);
 
-               JSONObject obj2 = new JSONObject(parsing_jsonResponse);
+               JSONObject obj2 = new JSONObject(
+                     parsing_jsonResponse);
                String text = obj2.getString("text");
 
                String[] parts = text.split("\\n");
@@ -153,10 +184,13 @@ public class APIAgent {
                      String adj = parts[j].split("\\/")[0].trim();
                      String next = parts[j+1].split("\\/")[0].trim();
                      // adj + noun
-                     if (parts[j+1].endsWith("/NN")  && next.length() > 2 && Character.isLetter(next.charAt(2)) ){
+                     if (parts[j+1].endsWith("/NN")  && 
+                           next.length() > 2 && 
+                           Character.isLetter(next.charAt(2)) ){
                         String new_adj = adj + " " + next;
                         // limit to words with >2 letters
-                        if (response.indexOf(new_adj) == -1 && adj.length() > 4 && next.length() > 4){
+                        if (response.indexOf(new_adj) == -1 && 
+                              adj.length() > 4 && next.length() > 4){
 
                            if (count < 9){	// stop when get to 10
                               response += new_adj + ", ";
@@ -188,18 +222,22 @@ public class APIAgent {
          int neutral = 0;
 
          try{
-            String sentiment_url = "http://text-processing.com/api/sentiment/";
+            String sentiment_url = 
+               "http://text-processing.com/api/sentiment/";
 
             JSONArray reviews = obj.getJSONArray("reviews");
 
             for (int i=0; i<reviews.length(); i++){
                JSONObject review = reviews.getJSONObject(i);
-               String review_txt = review.getString("review_text");   		  
+               String review_txt = review.getString("review_text"); 
                //call sentiment API to get polarity of review text
-               String param = "text=" + URLEncoder.encode(review_txt, "UTF-8");
-               String sentiment_jsonResponse = httpPost(sentiment_url, param);
+               String param = "text=" + URLEncoder.encode(
+                     review_txt, "UTF-8");
+               String sentiment_jsonResponse = httpPost(
+                     sentiment_url, param);
 
-               JSONObject obj2 = new JSONObject(sentiment_jsonResponse);
+               JSONObject obj2 = new JSONObject(
+                     sentiment_jsonResponse);
                String label = obj2.getString("label");
 
                //increment polarity counts
@@ -209,7 +247,10 @@ public class APIAgent {
 
             }
 
-            response = "There are " + pos + " positive reviews and " + neg + " negative reviews and " + neutral + " neutral reviews.";
+            response = "There are " + pos + 
+               " positive reviews and " + neg + 
+               " negative reviews and " + neutral + 
+               " neutral reviews.";
          }
          catch (IOException ioe) {
             ioe.printStackTrace();
@@ -229,11 +270,15 @@ public class APIAgent {
    }
 
    /**
-    * Source: http://rest.elkstein.org/2008/02/using-rest-in-java.html
+    * Generic HTTP Get request
+    * Source:http://rest.elkstein.org/2008/02/using-rest-in-java.html
+    * @param urlStr the URL to get
+    * @return the response
     */
    private static String httpGet(String urlStr) throws IOException {
       URL url = new URL(urlStr);
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      HttpURLConnection connection = (HttpURLConnection) 
+         url.openConnection();
 
       if (connection.getResponseCode() != 200) {
          throw new IOException(connection.getResponseMessage());
@@ -253,7 +298,14 @@ public class APIAgent {
       return sb.toString();
    }
 
-   public static String httpPost(String targetURL, String urlParameters)
+   /**
+    * Generic utility Post function
+    * @param targetURL the URL to post to
+    * @param urlParameters the parameters to include
+    * @return the post response
+    */
+   public static String httpPost(String targetURL, 
+         String urlParameters)
    {
       URL url;
       HttpURLConnection connection = null;  
@@ -267,7 +319,7 @@ public class APIAgent {
 
          connection.setRequestProperty("Content-Length", "" + 
                Integer.toString(urlParameters.getBytes().length));
-         connection.setRequestProperty("Content-Language", "en-US");  
+         connection.setRequestProperty("Content-Language", "en-US"); 
 
          connection.setUseCaches (false);
          connection.setDoInput(true);
@@ -282,7 +334,8 @@ public class APIAgent {
 
          //Get Response	
          InputStream is = connection.getInputStream();
-         BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+         BufferedReader rd = new BufferedReader(new 
+               InputStreamReader(is));
          String line;
          StringBuffer response = new StringBuffer(); 
          while((line = rd.readLine()) != null) {

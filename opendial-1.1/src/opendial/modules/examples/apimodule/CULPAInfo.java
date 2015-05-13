@@ -17,7 +17,8 @@ public class CULPAInfo implements Module {
 
    /**
     * Constructor for module
-    * @param system the dialogue system to which the module should be attached
+    * @param system the dialogue system to which the module should 
+    * be attached
     */
    public CULPAInfo(DialogueSystem system) throws IOException {
       this.system = system;
@@ -33,76 +34,56 @@ public class CULPAInfo implements Module {
    }
 
    /**
-    * Checks whether the updated variables contain the system action and
-    * if yes, what the system action value is.
-    *
+    * Checks whether the updated variables contain the system action 
+    * and if yes, what the system action value is.
     * @param state the current dialogue state
     * @param updatedVars the updates variables in the state
     */
    @Override
-   public void trigger(DialogueState state, Collection<String> updatedVars) {
-       DialogueSystem.log.info("Current step is: " + state.queryProb("current_step").toDiscrete().getBest().toString());
-        DialogueSystem.log.info("a_u: " + state.queryProb("a_u").toDiscrete().getBest().toString());
-        DialogueSystem.log.info("a_m: " + state.queryProb("a_m").toDiscrete().getBest().toString());
+   public void trigger(DialogueState state,
+         Collection<String> updatedVars) {
+      //Logging
+      DialogueSystem.log.info("Current step is: " + 
+         state.queryProb("current_step").toDiscrete().getBest().toString());
+      DialogueSystem.log.info("a_u: " + 
+         state.queryProb("a_u").toDiscrete().getBest().toString());
+      DialogueSystem.log.info("a_m: " + 
+         state.queryProb("a_m").toDiscrete().getBest().toString());
 
-       
-       if (updatedVars.contains("a_m") && state.hasChanceNode("a_m")) {
-         String action = state.queryProb("a_m").toDiscrete().getBest().toString();
-          //DialogueSystem.log.info("Prof name is Michael Collins");
- 	 DialogueSystem.log.info("in trigger, action = " + action);
-
-          
-          //Action 1 Validate(professor) is check if prof name exists, if yes, Ground([rpfesspr, else Reject(professor)
-          //Action 2 ground(reviewoptions, reviewoptions) then return SpeakReviews(Review)
-          
-          if (action.equals("Validate(Professor)")) {
-              String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
-              String profID = agent.getProfID(profname);
-              if (profID.equals("0")) {
-                  String newAction = "Reject(Professor)";
-                  system.addContent(new Assignment("a_m", newAction));
-	          DialogueSystem.log.info("a_m=" + newAction);
-              } else {
-                  String newAction = "Ground(Professor,"+profname+")";
-                  system.addContent(new Assignment("a_m", newAction));
-	          DialogueSystem.log.info("a_m=" + newAction);
-              }
-          }
-          if (action.equals("Ground(ReviewOptions)")) {
-	      DialogueSystem.log.info("grounding review options");
-              String profname = state.queryProb("Professor").toDiscrete().getBest().toString();
-              String profID = agent.getProfID(profname);
-              String revoption = state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
-              DialogueSystem.log.info("ReviewOptions: " + revoption);
-              
-              String review = agent.query("reviews", "professor_id", profID, revoption);
-              DialogueSystem.log.info("Review: " + review);
-              String newAction = "SpeakReview(" + review + ")";
-              system.addContent(new Assignment("a_m", newAction));
-              DialogueSystem.log.info("a_m" + newAction);
-          }
-
-         // end example
-         
-         /*if (action.equals("FindProfessor")) {
-            String profName = state.queryProb("Professor").toDiscrete().getBest().toString();
-            // query the API for that professor.
-            // for now just does a dummy return.
-            String classes = "NLP " + 
-                     "Spoken Dialogue Systems " +
-                     "Spoken Language Processing";
-            String newAction="DisplayClasses(" + classes + ")";
-            system.addContent(new Assignment("a_m", newAction));
-	    DialogueSystem.log.info("a_m=" + newAction);
+      if (updatedVars.contains("a_m") && 
+            state.hasChanceNode("a_m")) {
+         String action =
+            state.queryProb("a_m").toDiscrete().getBest().toString();
+         DialogueSystem.log.info("in trigger, action = " + action);
+         if (action.equals("Validate(Professor)")) {
+            String profname = 
+               state.queryProb("Professor").toDiscrete().getBest().toString();
+            String profID = agent.getProfID(profname);
+            if (profID.equals("0")) {
+               String newAction = "Reject(Professor)";
+               system.addContent(new Assignment("a_m", newAction));
+               DialogueSystem.log.info("a_m=" + newAction);
+            } else {
+               String newAction = "Ground(Professor,"+profname+")";
+               system.addContent(new Assignment("a_m", newAction));
+               DialogueSystem.log.info("a_m=" + newAction);
+            }
          }
-         else if (action.equals("FindClass")) {
-            String className = state.queryProb("a_m").toDiscrete().getBest().toString();
-            String classInfo = "9:10am, taught by a professor";
-            String newAction="DisplayClass(" + className + " " + classInfo + ")";
+         if (action.equals("Ground(ReviewOptions)")) {
+            String profname = 
+               state.queryProb("Professor").toDiscrete().getBest().toString();
+            String profID = agent.getProfID(profname);
+            String revoption = 
+               state.queryProb("ReviewOptions").toDiscrete().getBest().toString();
+            DialogueSystem.log.info("ReviewOptions: " + revoption);
+
+            String review = agent.query("reviews", 
+                  "professor_id", profID, revoption);
+            DialogueSystem.log.info("Review: " + review);
+            String newAction = "SpeakReview(" + review + ")";
             system.addContent(new Assignment("a_m", newAction));
-	    DialogueSystem.log.info("a_m=" + newAction);
+            DialogueSystem.log.info("a_m" + newAction);
          }
-	*/
       }
    }
 
